@@ -25,8 +25,12 @@ export default function NewInstrumentPage() {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
-  function handleImages(urls: string[]) {
-    setForm({ ...form, images: urls });
+  // NOW MATCH COMPONENT TYPE – accepts SINGLE URL string
+  function handleImages(url: string) {
+    setForm({
+      ...form,
+      images: [...form.images, url], // append new image to existing array
+    });
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -96,7 +100,7 @@ export default function NewInstrumentPage() {
           placeholder="Instrument Name *"
           className="w-full border p-3 rounded-md text-sm text-black"
           value={form.name}
-          onChange={handleChange}
+          onChange={handleImages}
           required
         />
 
