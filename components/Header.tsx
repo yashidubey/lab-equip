@@ -155,8 +155,8 @@ export default function RootLayout({
                 Contact
               </h4>
               <p className="flex flex-wrap gap-x-4 gap-y-1">
-                <span>Email:laboteckld@gmail.com</span>
-                <span>Contact: +91-9910891848</span>
+                <span>Email: info@labequip.com</span>
+                <span>Phone: +91 XXXXX XXXXX</span>
               </p>
             </div>
           </div>
