@@ -24,9 +24,9 @@ export default function QuoteForm({
     name: "",
     email: "",
     phone: "",
-    product: productFromURL, // preserved from URL
+    product: productFromURL,
     message: "",
-    website: "", // honeypot
+    website: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -47,26 +47,26 @@ export default function QuoteForm({
     setError("");
     setSuccess("");
 
-    // 🔒 Honeypot Spam Check
+    // Honeypot Spam Check
     if (form.website.trim() !== "") {
       setError("Spam detected.");
       return;
     }
 
-    // 🔍 Required Fields Validation
+    // Required Fields Validation
     if (!form.name || !form.email || !form.message) {
       setError("Please fill all required fields.");
       return;
     }
 
-    // 📧 Email Format Validation
+    // Email Format Validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(form.email)) {
       setError("Please enter a valid email address.");
       return;
     }
 
-    // 📱 Phone Validation
+    // Phone Validation
     const phoneRegex = /^[6-9]\d{9}$/;
     if (!phoneRegex.test(form.phone)) {
       setError("Please enter a valid 10-digit Indian phone number.");
@@ -88,12 +88,12 @@ export default function QuoteForm({
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.error || "Failed to submit quote request");
+        throw new Error(data.error || "Failed to submit enquiry");
       }
 
       setSuccess("Thank you! Your quote request has been sent successfully.");
 
-      // 🧹 Reset Form but keep context
+      // Reset Form but keep context
       setForm({
         name: "",
         email: "",
@@ -102,9 +102,10 @@ export default function QuoteForm({
         message: "",
         website: "",
       });
-    } catch {
-      setError("Something went wrong. Please try again.");
+    } catch (err: any) {
+      setError(err.message || "Something went wrong. Please try again.");
     } finally {
+      setLoading(false);
       setLoading(false);
     }
   }
@@ -214,7 +215,7 @@ export default function QuoteForm({
         * Required Fields
       </p>
 
-      {/* HONEYPOT FIELD – HIDDEN */}
+      {/* Honeypot Field – Hidden */}
       <input
         type="text"
         name="website"
@@ -227,4 +228,3 @@ export default function QuoteForm({
     </form>
   );
 }
-
