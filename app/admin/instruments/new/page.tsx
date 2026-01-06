@@ -16,13 +16,11 @@ export default function NewInstrumentPage() {
     shortDescription: "",
     description: "",
     images: [] as string[],
-    website: "", // honeypot anti-spam field
+    website: "",
   });
 
   function handleChange(
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement
-    >
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
@@ -35,14 +33,13 @@ export default function NewInstrumentPage() {
     e.preventDefault();
     setError("");
 
-    // VALIDATE REQUIRED FIELDS
     if (!form.name || !form.slug) {
       setError("Instrument Name and Slug are required.");
       return;
     }
 
-    // PREVENT SPAM SUBMISSIONS USING HONEYPOT FIELD
-    if (form.website) {
+    if (form.website.trim() !== "") {
+      setError("Spam detected.");
       return;
     }
 
@@ -50,14 +47,10 @@ export default function NewInstrumentPage() {
       const res = await fetch("/api/admin/instruments", {
         method: "POST",
         credentials: "include",
-
         headers: {
           "Content-Type": "application/json",
-
-          // CSRF PROTECTED HEADER
           "x-csrf-token": getCSRFToken(),
         },
-
         body: JSON.stringify(form),
       });
 
@@ -88,16 +81,16 @@ export default function NewInstrumentPage() {
 
       <form onSubmit={handleSubmit} className="space-y-5">
 
-        {/* HONEYPOT FIELD */}
         <input
           type="text"
           name="website"
           value={form.website}
           onChange={handleChange}
           className="hidden"
+          tabIndex={-1}
+          autoComplete="off"
         />
 
-        {/* NAME */}
         <input
           name="name"
           placeholder="Instrument Name *"
@@ -107,7 +100,6 @@ export default function NewInstrumentPage() {
           required
         />
 
-        {/* SLUG */}
         <input
           name="slug"
           placeholder="Instrument Slug *"
@@ -117,7 +109,6 @@ export default function NewInstrumentPage() {
           required
         />
 
-        {/* SHORT DESCRIPTION */}
         <input
           name="shortDescription"
           placeholder="Short Description"
@@ -126,7 +117,6 @@ export default function NewInstrumentPage() {
           onChange={handleChange}
         />
 
-        {/* DESCRIPTION */}
         <textarea
           name="description"
           placeholder="Full Description *"
@@ -137,7 +127,8 @@ export default function NewInstrumentPage() {
           required
         />
 
-        <ImageUploader onUploadComplete={handleImages} />
+        {/* ==== CSRF + IMAGE UPLOADER ==== */}
+        <ImageUploader onUpload={handleImages} />
 
         <button
           type="submit"
