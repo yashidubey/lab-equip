@@ -3,13 +3,20 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import ClientHeader from "@/components/ClientHeader";
 
-/* ✅ GOOGLE SEARCH CONSOLE VERIFICATION */
+/* ✅ SEO + GOOGLE SEARCH CONSOLE VERIFICATION */
 export const metadata: Metadata = {
-  title: "LabEquip Solutions | Laboratory Equipment Supplier",
+  title: {
+    default: "LabEquip Solutions | Laboratory Equipment Supplier",
+    template: "%s | LabEquip Solutions",
+  },
   description:
-    "LabEquip Solutions provides high-quality laboratory instruments and scientific equipment for research, education, and industry.",
+    "LabEquip Solutions provides high-quality laboratory instruments and scientific equipment for research, education, and industrial applications.",
   verification: {
     google: "XH-5ojTVbJWOcyjdUITdHBcRZ9V77rtOxlrr7FgoDAk",
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
