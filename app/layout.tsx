@@ -30,8 +30,8 @@ export default function RootLayout({
     <html lang="en">
       <head>
         
-       <meta name="google-site-verification" content="XH-5ojTVbJWOcyjdUITdHBcRZ9V77rtOxlrr7FgoDAk" />
-        
+       
+        <meta name="google-site-verification" content="XH-5ojTVbJWOcyjdUITdHBcRZ9V77rtOxlrr7FgoDAk" />
       </head>
       <body className="bg-slate-100 text-slate-900">
         {/* HEADER */}
