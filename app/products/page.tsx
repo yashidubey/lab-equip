@@ -2,20 +2,19 @@ import Link from "next/link";
 import Image from "next/image";
 import { connectDB } from "@/lib/db";
 import Product from "@/src/models/Product";
-import { Types } from "mongoose";
 
-type ProductDB = {
-  _id: Types.ObjectId;
+type ProductUI = {
+  id: string;
   name: string;
   slug: string;
   shortDescription: string;
-  images?: string[];
+  image: string | null;
 };
 
-async function getProducts() {
+async function getProducts(): Promise<ProductUI[]> {
   await connectDB();
 
-  const products = (await Product.find(
+  const rawProducts = await Product.find(
     { isActive: true },
     {
       name: 1,
@@ -25,13 +24,13 @@ async function getProducts() {
     }
   )
     .sort({ createdAt: -1 })
-    .lean()) as ProductDB[];
+    .lean();
 
-  return products.map((p) => ({
+  return rawProducts.map((p: any) => ({
     id: p._id.toString(),
     name: p.name,
     slug: p.slug,
-    shortDescription: p.shortDescription,
+    shortDescription: p.shortDescription ?? "",
     image:
       Array.isArray(p.images) && typeof p.images[0] === "string"
         ? p.images[0]

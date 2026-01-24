@@ -2,7 +2,8 @@ import dotenv from "dotenv";
 dotenv.config({ path: ".env.local" });
 
 import mongoose from "mongoose";
-import Category from "../src/models/Category";
+import Category from "../src/models/category";
+
 import Product from "../src/models/Product";
 
 const MONGODB_URI = process.env.MONGODB_URI;
@@ -20,7 +21,8 @@ function slugify(text: string) {
 }
 
 async function seed() {
-  await mongoose.connect(MONGODB_URI);
+  const uri = MONGODB_URI as string;
+  await mongoose.connect(uri);
 
   await Category.deleteMany({});
   await Product.deleteMany({});

@@ -7,7 +7,6 @@ import { getCSRFToken } from "@/lib/getCSRF";
 
 export default function NewInstrumentPage() {
   const router = useRouter();
-
   const [error, setError] = useState("");
 
   const [form, setForm] = useState({
@@ -16,7 +15,7 @@ export default function NewInstrumentPage() {
     shortDescription: "",
     description: "",
     images: [] as string[],
-    website: "",
+    website: "", // honeypot
   });
 
   function handleChange(
@@ -25,12 +24,12 @@ export default function NewInstrumentPage() {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
-  // NOW MATCH COMPONENT TYPE – accepts SINGLE URL string
-  function handleImages(url: string) {
-    setForm({
-      ...form,
-      images: [...form.images, url], // append new image to existing array
-    });
+  // ✅ Correct image handler (STRING ONLY)
+  function handleImageUpload(url: string) {
+    setForm((prev) => ({
+      ...prev,
+      images: [...prev.images, url],
+    }));
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -42,6 +41,7 @@ export default function NewInstrumentPage() {
       return;
     }
 
+    // honeypot spam protection
     if (form.website.trim() !== "") {
       setError("Spam detected.");
       return;
@@ -59,21 +59,18 @@ export default function NewInstrumentPage() {
       });
 
       const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || "Failed to create instrument");
-      }
+      if (!res.ok) throw new Error(data.error || "Failed");
 
       router.push("/admin/instruments");
       router.refresh();
     } catch (err: any) {
-      setError(err.message || "Server error occurred");
+      setError(err.message || "Server error");
     }
   }
 
   return (
-    <section className="max-w-5xl mx-auto px-6 py-16 bg-white mt-10 rounded-xl border shadow-sm text-black">
-      <h1 className="text-3xl font-bold text-black mb-8 border-b pb-3">
+    <section className="max-w-5xl mx-auto px-6 py-16 bg-white mt-10 rounded-xl border shadow-sm">
+      <h1 className="text-3xl font-bold mb-8 border-b pb-3">
         Add New Instrument
       </h1>
 
@@ -84,7 +81,7 @@ export default function NewInstrumentPage() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-5">
-
+        {/* Honeypot */}
         <input
           type="text"
           name="website"
@@ -98,16 +95,16 @@ export default function NewInstrumentPage() {
         <input
           name="name"
           placeholder="Instrument Name *"
-          className="w-full border p-3 rounded-md text-sm text-black"
+          className="w-full border p-3 rounded-md text-sm"
           value={form.name}
-          onChange={handleImages}
+          onChange={handleChange}
           required
         />
 
         <input
           name="slug"
           placeholder="Instrument Slug *"
-          className="w-full border p-3 rounded-md text-sm text-black"
+          className="w-full border p-3 rounded-md text-sm"
           value={form.slug}
           onChange={handleChange}
           required
@@ -116,7 +113,7 @@ export default function NewInstrumentPage() {
         <input
           name="shortDescription"
           placeholder="Short Description"
-          className="w-full border p-3 rounded-md text-sm text-black"
+          className="w-full border p-3 rounded-md text-sm"
           value={form.shortDescription}
           onChange={handleChange}
         />
@@ -125,22 +122,21 @@ export default function NewInstrumentPage() {
           name="description"
           placeholder="Full Description *"
           rows={5}
-          className="w-full border p-3 rounded-md text-sm text-black"
+          className="w-full border p-3 rounded-md text-sm"
           value={form.description}
           onChange={handleChange}
           required
         />
 
-        {/* ==== CSRF + IMAGE UPLOADER ==== */}
-        <ImageUploader onUpload={handleImages} />
+        {/* ✅ ONLY image input */}
+        <ImageUploader onUpload={handleImageUpload} />
 
         <button
           type="submit"
-          className="w-full bg-teal-600 hover:bg-teal-700 transition text-white py-3 rounded-md font-semibold text-sm"
+          className="w-full bg-teal-600 hover:bg-teal-700 text-white py-3 rounded-md font-semibold text-sm"
         >
           Save Instrument
         </button>
-
       </form>
     </section>
   );
