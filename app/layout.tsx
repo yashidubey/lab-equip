@@ -28,6 +28,11 @@ export default function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+        
+       <meta name="google-site-verification" content="XH-5ojTVbJWOcyjdUITdHBcRZ9V77rtOxlrr7FgoDAk" />
+        
+      </head>
       <body className="bg-slate-100 text-slate-900">
         {/* HEADER */}
         <header className="sticky top-0 z-50 bg-white border-b border-slate-200">
