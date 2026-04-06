@@ -115,19 +115,19 @@ export default async function CategoryProductsPage({
             >
               <div className="flex gap-8">
                 <div className="w-48">
-                  {p.image ? (
-                    <img
-                      src={p.image}
-                      alt={p.name}
-                      className="w-48 h-36 object-contain"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="text-sm text-gray-400">
-                      Image not available
-                    </div>
-                  )}
-                </div>
+  {p.image ? (
+    <img
+      src={p.image}
+      alt={p.name}
+      className="w-48 h-36 object-contain"
+      loading="lazy"
+    />
+  ) : (
+    <div className="text-sm text-gray-400">
+      Image not available
+    </div>
+  )}
+</div>
 
                 <div>
                   <h2 className="text-xl font-semibold mb-1">
