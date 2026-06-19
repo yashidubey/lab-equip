@@ -25,7 +25,7 @@ export default function ClientHeader() {
     <header className="sticky top-0 z-50 bg-white border-b border-slate-200">
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
         <Link href="/" className="text-xl font-bold text-slate-900">
-          LabEquip Solutions
+          Labzen Solutions
         </Link>
 
         <nav className="flex items-center space-x-6 text-sm font-medium relative">

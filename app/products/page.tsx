@@ -1,9 +1,52 @@
-import Link from "next/link";
-export const dynamic = "force-dynamic";
 
+import Link from "next/link";
 import Image from "next/image";
+import type { Metadata } from "next";
 import { connectDB } from "@/lib/db";
 import Product from "@/src/models/Product";
+
+export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Laboratory Equipment & Scientific Instruments | Labzen",
+
+  description:
+    "Explore laboratory equipment, scientific instruments, analytical instruments, biosafety cabinets, PCR cabinets, incubators and research laboratory solutions from Labzen.",
+
+  keywords: [
+    "laboratory equipment",
+    "scientific instruments",
+    "laboratory instruments supplier",
+    "biosafety cabinet supplier",
+    "PCR cabinet supplier",
+    "laboratory equipment india",
+    "research laboratory equipment",
+    "scientific equipment",
+  ],
+
+  alternates: {
+    canonical: "https://www.labzen.in/products",
+  },
+
+  openGraph: {
+    title: "Laboratory Equipment & Scientific Instruments | Labzen",
+
+    description:
+      "Browse laboratory equipment and scientific instruments supplied by Labzen across India.",
+
+    url: "https://www.labzen.in/products",
+    siteName: "Labzen",
+    type: "website",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "Laboratory Equipment & Scientific Instruments | Labzen",
+
+    description:
+      "Browse laboratory equipment and scientific instruments supplied by Labzen across India.",
+  },
+};
 
 type ProductUI = {
   id: string;
@@ -48,11 +91,14 @@ export default async function ProductsPage() {
       {/* HEADER */}
       <div className="mb-6 md:mb-10">
         <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-2">
-          Our Products
+          Laboratory Equipment & Scientific Instruments
         </h1>
+
         <p className="text-sm md:text-base text-gray-600 max-w-full md:max-w-3xl">
-          Explore our range of laboratory instruments and equipment designed
-          for research, testing, and industrial applications.
+          Explore laboratory equipment, scientific instruments, analytical
+          systems, biosafety cabinets, incubators and research solutions
+          designed for laboratories, educational institutions, healthcare
+          facilities and industrial applications.
         </p>
       </div>
 
@@ -103,3 +149,4 @@ export default async function ProductsPage() {
     </section>
   );
 }
+

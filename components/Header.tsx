@@ -34,7 +34,7 @@ export default function RootLayout({
           <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             {/* LOGO */}
             <Link href="/" className="text-xl font-bold text-slate-900">
-              LabEquip Solutions
+              Labzen Solutions
             </Link>
 
             {/* NAVIGATION */}
@@ -113,7 +113,7 @@ export default function RootLayout({
           <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-4 gap-8 text-sm">
             <div>
               <h4 className="font-semibold text-white mb-3">
-                LabEquip Solutions
+                Labzen Solutions
               </h4>
               <p className="leading-relaxed">
                 Independent distributor of laboratory equipment and scientific
@@ -162,7 +162,7 @@ export default function RootLayout({
           </div>
 
           <div className="border-t border-slate-800 text-center py-4 text-xs">
-            © {new Date().getFullYear()} LabEquip Solutions. All rights reserved.
+            © {new Date().getFullYear()} Labzen Solutions. All rights reserved.
           </div>
         </footer>
       </body>
