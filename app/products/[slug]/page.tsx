@@ -107,18 +107,34 @@ export default async function ProductDetailPage({
     : [];
 
   const productSchema = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    name: product.name,
-    description:
-      product.shortDescription || product.description || "",
-    image: image ? [image] : [],
-    brand: {
-      "@type": "Brand",
+  "@context": "https://schema.org",
+  "@type": "Product",
+
+  name: product.name,
+
+  description:
+    product.shortDescription || product.description || "",
+
+  image: image ? [image] : [],
+
+  brand: {
+    "@type": "Brand",
+    name: "Labzen",
+  },
+
+  url: `https://www.labzen.in/products/${product.slug}`,
+
+  offers: {
+    "@type": "Offer",
+    url: `https://www.labzen.in/products/${product.slug}`,
+    priceCurrency: "INR",
+    availability: "https://schema.org/InStock",
+    seller: {
+      "@type": "Organization",
       name: "Labzen",
     },
-    url: `https://www.labzen.in/products/${product.slug}`,
-  };
+  },
+};
 
   return (
     <>
