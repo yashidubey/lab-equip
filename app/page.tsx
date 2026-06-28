@@ -6,6 +6,7 @@ import Product from "@/src/models/Product";
 import type { Metadata } from "next";
 import Blog from "@/src/models/Blog";
 
+
 export const metadata: Metadata = {
   title:
     "Laboratory Equipment & Scientific Instruments Supplier in India | Labzen",

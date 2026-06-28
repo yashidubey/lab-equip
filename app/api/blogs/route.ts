@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { connectDB } from "@/lib/db";
 import Blog from "@/src/models/Blog";
+import { revalidatePath } from "next/cache";
 
 // ================= ADMIN CHECK =================
 async function isAdmin() {
@@ -35,7 +36,9 @@ function createSlug(text: string) {
 export async function GET() {
   await connectDB();
 
-  const blogs = await Blog.find({ isPublished: true })
+  const blogs = await Blog.find({
+    isPublished: true,
+  })
     .sort({ createdAt: -1 })
     .lean();
 
@@ -120,6 +123,11 @@ export async function POST(req: Request) {
         ? true
         : Boolean(body.isPublished),
   });
+
+  // ✅ Refresh cache immediately
+  revalidatePath("/");
+  revalidatePath("/blog");
+  revalidatePath(`/blog/${blog.slug}`);
 
   return NextResponse.json(blog, {
     status: 201,

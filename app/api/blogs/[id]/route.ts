@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import mongoose from "mongoose";
 import { connectDB } from "@/lib/db";
 import Blog from "@/src/models/Blog";
+import { revalidatePath } from "next/cache";
 
 // ================= ADMIN CHECK =================
 async function isAdmin() {
