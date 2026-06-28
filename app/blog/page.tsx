@@ -3,6 +3,8 @@ import Image from "next/image";
 import { connectDB } from "@/lib/db";
 import Blog from "@/src/models/Blog";
 import type { Metadata } from "next";
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: "Laboratory Blog | Labzen",
