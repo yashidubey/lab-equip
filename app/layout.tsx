@@ -2,6 +2,7 @@ import "./globals.css";
 import Link from "next/link";
 import type { Metadata } from "next";
 import ClientHeader from "@/components/ClientHeader";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.labzen.in"),
@@ -31,8 +32,8 @@ export const metadata: Metadata = {
   ],
 
   verification: {
-    google: "XH-5ojTVbJWOcyjdUITdHBcRZ9V77rtOxlrr7FgoDAk",
-  },
+  google: "XoRw3hVH4z5dRocAQEFd2IZlFIgM7fVCYKhL8lZel50",
+},
 
   robots: {
     index: true,
@@ -110,6 +111,20 @@ export default function RootLayout({
             __html: JSON.stringify(organizationSchema),
           }}
         />
+        <Script
+  src="https://www.googletagmanager.com/gtag/js?id=G-ZF2CC0HKBF"
+  strategy="afterInteractive"
+/>
+
+<Script id="google-analytics" strategy="afterInteractive">
+  {`
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-ZF2CC0HKBF');
+  `}
+</Script>
 
         <ClientHeader />
 
@@ -153,23 +168,32 @@ export default function RootLayout({
                   </Link>
                 </li>
 
-                <li>
-                  <Link
-                    href="/about"
-                    className="hover:text-white transition"
-                  >
-                    About Us
-                  </Link>
-                </li>
+             <li>
+  <Link
+    href="/about"
+    className="hover:text-white transition"
+  >
+    About Us
+  </Link>
+</li>
 
-                <li>
-                  <Link
-                    href="/contact"
-                    className="hover:text-white transition"
-                  >
-                    Contact
-                  </Link>
-                </li>
+<li>
+  <Link
+    href="/blog"
+    className="hover:text-white transition"
+  >
+    Blog
+  </Link>
+</li>
+
+<li>
+  <Link
+    href="/contact"
+    className="hover:text-white transition"
+  >
+    Contact
+  </Link>
+</li>
               </ul>
             </div>
 

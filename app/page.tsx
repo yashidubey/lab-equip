@@ -4,6 +4,7 @@ import { connectDB } from "@/lib/db";
 import Category from "@/src/models/category";
 import Product from "@/src/models/Product";
 import type { Metadata } from "next";
+import Blog from "@/src/models/Blog";
 
 export const metadata: Metadata = {
   title:
@@ -55,6 +56,25 @@ async function getCategories() {
   await connectDB();
   return Category.find().sort({ name: 1 }).lean();
 }
+async function getLatestBlogs() {
+  await connectDB();
+
+  const blogs = await Blog.find({
+    isPublished: true,
+  })
+    .sort({ createdAt: -1 })
+    .limit(3)
+    .lean();
+
+  return blogs.map((blog: any) => ({
+    id: blog._id.toString(),
+    title: blog.title,
+    slug: blog.slug,
+    excerpt: blog.excerpt,
+    coverImage: blog.coverImage,
+    createdAt: blog.createdAt,
+  }));
+}
 
 async function getFeaturedProducts() {
   await connectDB();
@@ -81,7 +101,10 @@ async function getFeaturedProducts() {
 
 export default async function HomePage() {
   const categories = await getCategories();
-  const featuredProducts = await getFeaturedProducts();
+
+const featuredProducts = await getFeaturedProducts();
+
+const latestBlogs = await getLatestBlogs();
 
   return (
     <div className="space-y-24">
@@ -310,6 +333,71 @@ export default async function HomePage() {
     </div>
 
   </div>
+</section>
+<section className="bg-slate-50 py-20">
+
+  <div className="max-w-7xl mx-auto px-6">
+
+    <div className="flex justify-between items-center mb-10">
+
+      <h2 className="text-3xl font-bold">
+        Latest Articles
+      </h2>
+
+      <Link
+        href="/blog"
+        className="text-blue-600 hover:underline"
+      >
+        View All →
+      </Link>
+
+    </div>
+
+    <div className="grid md:grid-cols-3 gap-8">
+
+      {latestBlogs.map((blog) => (
+
+        <Link
+          key={blog.id}
+          href={`/blog/${blog.slug}`}
+          className="bg-white border rounded-xl overflow-hidden hover:shadow-lg transition"
+        >
+
+          {blog.coverImage && (
+
+            <div className="relative h-56">
+
+              <Image
+                src={blog.coverImage}
+                alt={blog.title}
+                fill
+                className="object-cover"
+              />
+
+            </div>
+
+          )}
+
+          <div className="p-6">
+
+            <h3 className="text-xl font-bold mb-3">
+              {blog.title}
+            </h3>
+
+            <p className="text-slate-600 line-clamp-3">
+              {blog.excerpt}
+            </p>
+
+          </div>
+
+        </Link>
+
+      ))}
+
+    </div>
+
+  </div>
+
 </section>
 
       {/* ================= WHY CHOOSE US ================= */}

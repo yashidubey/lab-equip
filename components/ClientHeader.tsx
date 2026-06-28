@@ -56,8 +56,26 @@ export default function ClientHeader() {
             )}
           </div>
 
-          <Link href="/about" className="hover:text-teal-600">About Us</Link>
-          <Link href="/contact" className="hover:text-teal-600">Contact</Link>
+         <Link
+  href="/about"
+  className="hover:text-teal-600"
+>
+  About Us
+</Link>
+
+<Link
+  href="/blog"
+  className="hover:text-teal-600"
+>
+  Blog
+</Link>
+
+<Link
+  href="/contact"
+  className="hover:text-teal-600"
+>
+  Contact
+</Link>
           <Link href="/free-quote" className="hover:text-teal-600">Free Quote</Link>
         </nav>
 
