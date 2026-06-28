@@ -5,7 +5,7 @@ import Category from "@/src/models/category";
 import Product from "@/src/models/Product";
 import type { Metadata } from "next";
 import Blog from "@/src/models/Blog";
-
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title:
