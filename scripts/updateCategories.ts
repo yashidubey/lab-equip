@@ -8,6 +8,10 @@ async function run() {
 
   const db = mongoose.connection.db;
 
+if (!db) {
+  throw new Error("Database connection not established.");
+}
+
   const categories = db.collection("categories");
   const products = db.collection("products");
 
