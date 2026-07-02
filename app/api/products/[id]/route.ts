@@ -58,12 +58,15 @@ export async function PUT(
   }
 
   const { id } = await params;
+
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
   }
 
   await connectDB();
+
   const product = await Product.findById(id);
+
   if (!product) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
@@ -82,13 +85,18 @@ export async function PUT(
     product.description = sanitizeText(body.description);
   }
 
+  // ✅ NEW: Save Navbar visibility
+  if (typeof body.showInNavbar === "boolean") {
+    product.showInNavbar = body.showInNavbar;
+  }
+
   product.category = body.category || null;
 
   if (Array.isArray(body.images)) {
     product.images = body.images.filter((u: any) => typeof u === "string");
   }
 
-  // ✅ FIX: PRESERVE / GENERATE BLOCK IDS
+  // ✅ Preserve / Generate Block IDs
   if (Array.isArray(body.contentBlocks)) {
     product.contentBlocks = body.contentBlocks.map((b: any) => ({
       id: b.id || crypto.randomUUID(),
@@ -101,6 +109,7 @@ export async function PUT(
   }
 
   await product.save();
+
   return NextResponse.json({ success: true });
 }
 
@@ -116,7 +125,10 @@ export async function DELETE(
   }
 
   const { id } = await params;
+
   await connectDB();
+
   await Product.findByIdAndDelete(id);
+
   return NextResponse.json({ success: true });
 }

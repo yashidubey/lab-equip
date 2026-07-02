@@ -45,7 +45,7 @@ export async function GET() {
   });
 }
 
-/* ================= CREATE PRODUCT (ADMIN) – FIXED ================= */
+/* ================= CREATE PRODUCT (ADMIN) ================= */
 export async function POST(req: Request) {
   if (!(await isAdmin())) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -81,6 +81,9 @@ export async function POST(req: Request) {
     shortDescription: sanitizeText(body.shortDescription),
     description: sanitizeText(body.description),
     category: body.category || null,
+
+    // ✅ NEW
+    showInNavbar: body.showInNavbar === true,
 
     images: Array.isArray(body.images)
       ? body.images.filter(Boolean)

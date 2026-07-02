@@ -27,6 +27,7 @@ export default function NewProductPage() {
     shortDescription: "",
     description: "",
     category: "", // ⬅️ EMPTY = NO CATEGORY
+    showInNavbar: false,
     images: [] as string[],
     contentBlocks: [] as ContentBlock[],
   });
@@ -72,11 +73,9 @@ export default function NewProductPage() {
   async function submit() {
     setError("");
 
-    // ❌ REMOVED category mandatory validation
-
     const payload = {
       ...form,
-      category: form.category || null, // ✅ NULL IF NOT SELECTED
+      category: form.category || null,
       images: form.images.filter(Boolean),
       contentBlocks: form.contentBlocks.map((b) => ({
         id: b.id,
@@ -154,6 +153,24 @@ export default function NewProductPage() {
               </option>
             ))}
           </select>
+        </div>
+
+        {/* ✅ SHOW IN NAVBAR */}
+        <div>
+          <label className="flex items-center gap-3 font-semibold text-slate-900">
+            <input
+              type="checkbox"
+              checked={form.showInNavbar}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  showInNavbar: e.target.checked,
+                })
+              }
+              className="w-5 h-5"
+            />
+            Show this product in the navbar dropdown
+          </label>
         </div>
 
         <div>

@@ -28,6 +28,7 @@ export default function EditProductPage() {
     shortDescription: "",
     description: "",
     category: "",
+    showInNavbar: false,
     images: [] as string[],
     contentBlocks: [] as ContentBlock[],
   });
@@ -53,6 +54,7 @@ export default function EditProductPage() {
           shortDescription: data.shortDescription || "",
           description: data.description || "",
           category: data.category || "",
+          showInNavbar: data.showInNavbar ?? false,
           images: Array.isArray(data.images) ? data.images : [],
           contentBlocks: Array.isArray(data.contentBlocks)
             ? data.contentBlocks.map((b: any) => ({
@@ -177,6 +179,23 @@ export default function EditProductPage() {
               </option>
             ))}
           </select>
+        </div>
+
+        <div>
+          <label className="flex items-center gap-3 font-semibold text-slate-900">
+            <input
+              type="checkbox"
+              checked={form.showInNavbar}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  showInNavbar: e.target.checked,
+                })
+              }
+              className="w-5 h-5"
+            />
+            Show this product in the navbar dropdown
+          </label>
         </div>
 
         <div>

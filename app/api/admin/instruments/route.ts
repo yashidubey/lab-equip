@@ -18,11 +18,14 @@ function sanitizeText(input: unknown): string {
 }
 
 // ============================
-// GET ALL INSTRUMENTS – ADDED
+// GET ALL INSTRUMENTS
 // ============================
 export async function GET() {
   if (!(await isAdmin())) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json(
+      { error: "Unauthorized" },
+      { status: 401 }
+    );
   }
 
   await connectDB();
@@ -31,30 +34,47 @@ export async function GET() {
     .sort({ createdAt: -1 })
     .lean();
 
-  return NextResponse.json(instruments, { status: 200 });
+  return NextResponse.json(instruments, {
+    status: 200,
+  });
 }
-// ← END ADDED GET PART
 
 // ============================
 // CREATE INSTRUMENT (ADMIN)
 // ============================
 export async function POST(req: Request) {
   if (!(await isAdmin())) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json(
+      { error: "Unauthorized" },
+      { status: 401 }
+    );
   }
 
   await connectDB();
+
   const body = await req.json();
 
   if (!body.name || !body.slug) {
     return NextResponse.json(
-      { error: "Name and Slug are required." },
-      { status: 400 }
+      {
+        error: "Name and Slug are required.",
+      },
+      {
+        status: 400,
+      }
     );
   }
 
+  // Honeypot
   if (body.website) {
-    return NextResponse.json({ error: "Invalid request." }, { status: 400 });
+    return NextResponse.json(
+      {
+        error: "Invalid request.",
+      },
+      {
+        status: 400,
+      }
+    );
   }
 
   const images = Array.isArray(body.images)
@@ -65,24 +85,50 @@ export async function POST(req: Request) {
     const instrument = await Instrument.create({
       name: sanitizeText(body.name),
       slug: sanitizeText(body.slug),
-      description: sanitizeText(body.description),
-      shortDescription: sanitizeText(body.shortDescription),
+
+      shortDescription: sanitizeText(
+        body.shortDescription
+      ),
+
+      description: sanitizeText(
+        body.description
+      ),
+
+      // ✅ NEW SEO FIELDS
+      seoTitle: sanitizeText(body.seoTitle),
+      seoDescription: sanitizeText(
+        body.seoDescription
+      ),
+
       images,
+
       isActive: true,
     });
 
-    return NextResponse.json(instrument, { status: 201 });
+    return NextResponse.json(instrument, {
+      status: 201,
+    });
   } catch (err: any) {
     if (err.code === 11000) {
       return NextResponse.json(
-        { error: "Slug already exists. Please use a unique slug." },
-        { status: 400 }
+        {
+          error:
+            "Slug already exists. Please use a unique slug.",
+        },
+        {
+          status: 400,
+        }
       );
     }
 
     return NextResponse.json(
-      { error: "Server error occurred while creating instrument." },
-      { status: 400 }
+      {
+        error:
+          "Server error occurred while creating instrument.",
+      },
+      {
+        status: 400,
+      }
     );
   }
 }

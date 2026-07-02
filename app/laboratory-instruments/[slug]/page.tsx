@@ -1,5 +1,6 @@
 export const dynamic = "force-dynamic";
 
+import type { Metadata } from "next";
 import { connectDB } from "@/lib/db";
 import Instrument from "@/src/models/instrument";
 import Image from "next/image";
@@ -8,13 +9,90 @@ import Link from "next/link";
 // 🔒 Normalize arrays (hydration-safe)
 function normalizeArray(value: unknown): string[] {
   if (Array.isArray(value)) return value.filter(Boolean);
+
   if (typeof value === "string" && value.trim() !== "") {
     return value
       .split("\n")
       .map((v) => v.trim())
       .filter(Boolean);
   }
+
   return [];
+}
+
+// ===========================================
+// SEO METADATA
+// ===========================================
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+
+  await connectDB();
+
+  const instrument: any = await Instrument.findOne({
+    slug,
+    isActive: true,
+  }).lean();
+
+  if (!instrument) {
+    return {
+      title: "Instrument Not Found | Labzen",
+      description:
+        "The requested laboratory instrument could not be found.",
+    };
+  }
+
+  const image =
+    Array.isArray(instrument.images) &&
+    typeof instrument.images[0] === "string"
+      ? instrument.images[0]
+      : undefined;
+
+  const title =
+    instrument.seoTitle?.trim() ||
+    `${instrument.name} | Labzen`;
+
+  const description =
+    instrument.seoDescription?.trim() ||
+    instrument.description ||
+    "";
+
+  return {
+    title,
+    description,
+
+    keywords: [
+      instrument.name,
+      "laboratory instruments",
+      "scientific instruments",
+      "laboratory equipment supplier india",
+      "research laboratory equipment",
+      "labzen",
+    ],
+
+    alternates: {
+      canonical: `https://www.labzen.in/laboratory-instruments/${instrument.slug}`,
+    },
+
+    openGraph: {
+      title,
+      description,
+      url: `https://www.labzen.in/laboratory-instruments/${instrument.slug}`,
+      siteName: "Labzen",
+      type: "website",
+      images: image ? [{ url: image }] : [],
+    },
+
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: image ? [image] : [],
+    },
+  };
 }
 
 export default async function InstrumentDetailPage({
@@ -23,6 +101,7 @@ export default async function InstrumentDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+
   await connectDB();
 
   const instrument: any = await Instrument.findOne({
@@ -40,7 +119,9 @@ export default async function InstrumentDetailPage({
 
   const images = Array.isArray(instrument.images)
     ? instrument.images.filter(
-        (img: any) => typeof img === "string" && img.startsWith("http")
+        (img: any) =>
+          typeof img === "string" &&
+          img.startsWith("http")
       )
     : [];
 
@@ -52,25 +133,35 @@ export default async function InstrumentDetailPage({
       : [
           {
             id: "applications",
-            title: instrument.applicationsTitle || "Applications",
-            items: normalizeArray(instrument.applications),
+            title:
+              instrument.applicationsTitle ||
+              "Applications",
+            items: normalizeArray(
+              instrument.applications
+            ),
             image: "",
           },
           {
             id: "features",
-            title: instrument.featuresTitle || "Features",
-            items: normalizeArray(instrument.features),
+            title:
+              instrument.featuresTitle ||
+              "Features",
+            items: normalizeArray(
+              instrument.features
+            ),
             image: "",
           },
         ];
 
-  const specifications = Array.isArray(instrument.specifications)
+  const specifications = Array.isArray(
+    instrument.specifications
+  )
     ? instrument.specifications
     : [];
 
   return (
     <div className="bg-slate-50">
-      {/* ================= HERO ================= */}
+              {/* ================= HERO ================= */}
       <section className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-6 py-14 grid md:grid-cols-2 gap-10 items-center">
           <div>
@@ -114,6 +205,7 @@ export default async function InstrumentDetailPage({
           <div className="bg-white rounded-xl border shadow-sm p-8">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-1 h-6 bg-teal-600 rounded-full" />
+
               <h2 className="text-xl font-semibold text-slate-900">
                 Instrument Overview
               </h2>
@@ -127,88 +219,143 @@ export default async function InstrumentDetailPage({
       )}
 
       {/* ================= BLOCKS ================= */}
+
       <section className="max-w-7xl mx-auto px-6 py-8 space-y-6">
+
         {blocks.map((block: any) => {
+
           const hasImage =
             typeof block.image === "string" &&
             block.image.startsWith("http");
 
           return (
+
             <div
               key={block.id}
               className="bg-white rounded-xl border shadow-sm p-6"
             >
+
               <div
                 className={`grid gap-6 ${
-                  hasImage ? "md:grid-cols-2" : "grid-cols-1"
+                  hasImage
+                    ? "md:grid-cols-2"
+                    : "grid-cols-1"
                 }`}
               >
+
                 <div>
+
                   <h3 className="text-lg font-semibold text-slate-900 mb-2 border-b pb-1">
                     {block.title}
                   </h3>
 
                   <ul className="list-disc ml-5 space-y-1 text-slate-700 text-[15px]">
-                    {block.items.map((item: string, i: number) => (
-                      <li key={i}>{item}</li>
-                    ))}
+
+                    {block.items.map(
+                      (
+                        item: string,
+                        i: number
+                      ) => (
+                        <li key={i}>
+                          {item}
+                        </li>
+                      )
+                    )}
+
                   </ul>
+
                 </div>
 
                 {hasImage && (
+
                   <div className="relative h-[240px] bg-slate-50 rounded-lg">
+
                     <Image
                       src={block.image}
                       alt={block.title}
                       fill
                       className="object-contain p-4"
                     />
-                  </div>
-                )}
-              </div>
-            </div>
-          );
-        })}
-      </section>
 
-      {/* ================= SPECIFICATIONS ================= */}
+                  </div>
+
+                )}
+
+              </div>
+
+            </div>
+
+          );
+
+        })}
+
+      </section>
+            {/* ================= SPECIFICATIONS ================= */}
+
       {specifications.length > 0 && (
         <section className="max-w-6xl mx-auto px-6 py-10">
+
           <div className="bg-white rounded-xl border shadow-sm p-6">
+
             <h3 className="text-lg font-semibold text-slate-900 mb-4 border-b pb-2">
               Technical Specifications
             </h3>
 
             <table className="w-full text-sm border-collapse">
+
               <tbody>
+
                 {specifications.map(
-                  (s: { key: string; value: string }, i: number) => (
-                    <tr key={i} className="border-b">
+                  (
+                    s: {
+                      key: string;
+                      value: string;
+                    },
+                    i: number
+                  ) => (
+
+                    <tr
+                      key={i}
+                      className="border-b"
+                    >
+
                       <td className="py-3 px-2 font-medium w-1/3">
                         {s.key}
                       </td>
+
                       <td className="py-3 px-2">
                         {s.value}
                       </td>
+
                     </tr>
+
                   )
                 )}
+
               </tbody>
+
             </table>
+
           </div>
+
         </section>
       )}
 
       {/* ================= FINAL CTA ================= */}
+
       <section className="bg-gradient-to-r from-gray-900 to-gray-800 mt-12">
+
         <div className="max-w-7xl mx-auto px-6 py-12 text-center text-white">
+
           <h3 className="text-2xl font-bold mb-3">
             Need Pricing or Technical Assistance?
           </h3>
+
           <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
-            Get in touch with our specialists to find the right
-            laboratory solution for your application.
+            Get in touch with our specialists to find the
+            right laboratory solution for your application.
           </p>
+
           <Link
             href={`/free-quote?instrument=${encodeURIComponent(
               instrument.name
@@ -217,8 +364,11 @@ export default async function InstrumentDetailPage({
           >
             Get a Free Quote
           </Link>
+
         </div>
+
       </section>
+
     </div>
   );
 }

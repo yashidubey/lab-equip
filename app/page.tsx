@@ -144,41 +144,48 @@ const latestBlogs = await getLatestBlogs();
       </section>
 
       {/* ================= PRODUCT CATEGORIES ================= */}
-      <section>
-        <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-slate-900 mb-10">
-            Product Categories
-          </h2>
+           {/* ================= PRODUCT CATEGORIES ================= */}
+      {/* ================= PRODUCT CATEGORIES ================= */}
+<section>
+  <div className="max-w-7xl mx-auto px-6">
+    <h2 className="text-3xl font-bold text-slate-900 mb-10">
+      Product Categories
+    </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-            {categories.map((category: any) => (
-              <Link
-                key={category._id}
-                href={`/products/category/${category.slug}`}
-                className="border border-slate-300 rounded-lg p-6 text-center hover:shadow-lg bg-white transition block"
-              >
-                <div className="h-24 flex items-center justify-center bg-slate-100 rounded mb-4 overflow-hidden">
-                  {category.image ? (
-                    <img
-                      src={category.image}
-                      alt={category.name}
-                      className="max-h-full max-w-full object-contain"
-                    />
-                  ) : (
-                    <span className="text-slate-400 text-sm">
-                      No image
-                    </span>
-                  )}
-                </div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+      {categories
+        .filter(
+          (category: any) =>
+            category.name.toLowerCase() !== "lab equipments"
+        )
+        .map((category: any) => (
+          <Link
+            key={category._id}
+            href={`/products/category/${category.slug}`}
+            className="border border-slate-300 rounded-lg p-6 text-center hover:shadow-lg bg-white transition block"
+          >
+            <div className="h-24 flex items-center justify-center bg-slate-100 rounded mb-4 overflow-hidden">
+              {category.image ? (
+                <img
+                  src={category.image}
+                  alt={category.name}
+                  className="max-h-full max-w-full object-contain"
+                />
+              ) : (
+                <span className="text-slate-400 text-sm">
+                  No image
+                </span>
+              )}
+            </div>
 
-                <h3 className="font-semibold text-slate-800">
-                  {category.name}
-                </h3>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
+            <h3 className="font-semibold text-slate-800">
+              {category.name}
+            </h3>
+          </Link>
+        ))}
+    </div>
+  </div>
+</section>
 {/* ================= FEATURED PRODUCTS ================= */}
 {/* ================= FEATURED PRODUCTS ================= */}
 <section className="bg-slate-50 py-20">

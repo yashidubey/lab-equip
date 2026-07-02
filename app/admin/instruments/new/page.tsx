@@ -14,17 +14,26 @@ export default function NewInstrumentPage() {
     slug: "",
     shortDescription: "",
     description: "",
+
+    // ✅ SEO
+    seoTitle: "",
+    seoDescription: "",
+
     images: [] as string[],
+
     website: "", // honeypot
   });
 
   function handleChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
   }
 
-  // ✅ Correct image handler (STRING ONLY)
+  // ✅ Correct image handler
   function handleImageUpload(url: string) {
     setForm((prev) => ({
       ...prev,
@@ -41,7 +50,7 @@ export default function NewInstrumentPage() {
       return;
     }
 
-    // honeypot spam protection
+    // Honeypot spam protection
     if (form.website.trim() !== "") {
       setError("Spam detected.");
       return;
@@ -59,7 +68,10 @@ export default function NewInstrumentPage() {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed");
+
+      if (!res.ok) {
+        throw new Error(data.error || "Failed");
+      }
 
       router.push("/admin/instruments");
       router.refresh();
@@ -81,6 +93,7 @@ export default function NewInstrumentPage() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-5">
+
         {/* Honeypot */}
         <input
           type="text"
@@ -128,7 +141,27 @@ export default function NewInstrumentPage() {
           required
         />
 
-        {/* ✅ ONLY image input */}
+        {/* ================= SEO ================= */}
+
+        <input
+          name="seoTitle"
+          placeholder="SEO Title"
+          className="w-full border p-3 rounded-md text-sm"
+          value={form.seoTitle}
+          onChange={handleChange}
+        />
+
+        <textarea
+          name="seoDescription"
+          placeholder="SEO Description"
+          rows={3}
+          className="w-full border p-3 rounded-md text-sm"
+          value={form.seoDescription}
+          onChange={handleChange}
+        />
+
+        {/* ================= IMAGE ================= */}
+
         <ImageUploader onUpload={handleImageUpload} />
 
         <button

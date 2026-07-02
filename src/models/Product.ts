@@ -46,6 +46,12 @@ const ProductSchema = new Schema(
       default: [],
     },
 
+    // ✅ Controls whether this product appears in the navbar dropdown
+    showInNavbar: {
+      type: Boolean,
+      default: false,
+    },
+
     isActive: { type: Boolean, default: true },
   },
   { timestamps: true }
