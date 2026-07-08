@@ -120,7 +120,7 @@ export const productMetadata: Record<
       "Benchtop Automatic Potential Titrator is a high-performance laboratory instrument designed to meet the demanding requirements of routine and advanced titration analysis.",
   },
 
-  biodegradable-bags: {
+  "biodegradable-bags":  {
     title: "Compostable & Biodegradable Manufacturer, Suppliers",
     description:
       "100% biodegradable bags designed for safe and responsible waste disposal. Compostable bags are a eco-friendly alternative to plastic, made from plant-based materials like corn and potato starch.",
