@@ -1,7 +1,7 @@
-
 export const dynamic = "force-dynamic";
 
 import type { Metadata } from "next";
+import { productMetadata } from "@/lib/productMetadata";
 import { connectDB } from "@/lib/db";
 import ProductDetailLayout from "@/components/ProductDetailLayout";
 import Product from "@/src/models/Product";
@@ -33,10 +33,15 @@ export async function generateMetadata({
       ? product.images[0]
       : undefined;
 
-  const title = `${product.name} Supplier in India | Labzen`;
+  const seo = productMetadata[slug];
+
+  const title =
+    seo?.title ??
+    `${product.name} Supplier in India | Labzen`;
 
   const description =
-    product.shortDescription?.trim() ||
+    seo?.description ??
+    product.shortDescription?.trim() ??
     `Explore ${product.name} from Labzen, a trusted supplier of laboratory equipment and scientific instruments in India.`;
 
   return {
@@ -73,7 +78,6 @@ export async function generateMetadata({
     },
   };
 }
-
 export default async function ProductDetailPage({
   params,
 }: {
@@ -102,39 +106,46 @@ export default async function ProductDetailPage({
       ? product.images[0]
       : null;
 
+  const seo = productMetadata[slug];
+
+  const description =
+    seo?.description ??
+    product.shortDescription?.trim() ??
+    product.description ??
+    "";
+
   const safeBlocks = Array.isArray(product.contentBlocks)
     ? JSON.parse(JSON.stringify(product.contentBlocks))
     : [];
 
   const productSchema = {
-  "@context": "https://schema.org",
-  "@type": "Product",
+    "@context": "https://schema.org",
+    "@type": "Product",
 
-  name: product.name,
+    name: product.name,
 
-  description:
-    product.shortDescription || product.description || "",
+    description,
 
-  image: image ? [image] : [],
+    image: image ? [image] : [],
 
-  brand: {
-    "@type": "Brand",
-    name: "Labzen",
-  },
-
-  url: `https://www.labzen.in/products/${product.slug}`,
-
-  offers: {
-    "@type": "Offer",
-    url: `https://www.labzen.in/products/${product.slug}`,
-    priceCurrency: "INR",
-    availability: "https://schema.org/InStock",
-    seller: {
-      "@type": "Organization",
+    brand: {
+      "@type": "Brand",
       name: "Labzen",
     },
-  },
-};
+
+    url: `https://www.labzen.in/products/${product.slug}`,
+
+    offers: {
+      "@type": "Offer",
+      url: `https://www.labzen.in/products/${product.slug}`,
+      priceCurrency: "INR",
+      availability: "https://schema.org/InStock",
+      seller: {
+        "@type": "Organization",
+        name: "Labzen",
+      },
+    },
+  };
 
   return (
     <>
@@ -155,4 +166,3 @@ export default async function ProductDetailPage({
     </>
   );
 }
-
